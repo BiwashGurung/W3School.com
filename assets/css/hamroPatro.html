@@ -1,0 +1,90 @@
+<div class="column4" style="margin-bottom: 0px">
+  <div class="logo">
+    <!-- Elements to dynamically fill content -->
+    <div class="date" id="nepaliDate"></div>
+    <div
+      id="nepaliFestival"
+      style="margin: 10px 0; color: white; font-size: 1.3rem"
+    ></div>
+    <div id="panchang" style="line-height: 1.9"></div>
+    <div class="time" id="timeContent"></div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  // Variables for static text content
+  var nepaliDate = "२२ भदौ २०८१, शनिवार";
+  var nepaliFestival = "भदौ शुक्ल चतुर्थी";
+  var panchang = "पञ्चाङ्ग: ब्रह्म विष्टि/भद्रा चित्रा";
+
+  // Update the static text content dynamically using JS
+  document.getElementById("nepaliDate").innerHTML =
+    "<span class='nep'>" + nepaliDate + "</span><br>";
+  document.getElementById("nepaliFestival").innerHTML = nepaliFestival;
+  document.getElementById("panchang").innerHTML = panchang;
+
+  var montharray = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  function padlength(what) {
+    return what.toString().length == 1 ? "0" + what : what;
+  }
+
+  function displaytime() {
+    var serverdate = new Date();
+
+    var datestring =
+      montharray[serverdate.getMonth()] +
+      " " +
+      padlength(serverdate.getDate()) +
+      ", " +
+      serverdate.getFullYear();
+    var hours = serverdate.getHours();
+    var minutes = serverdate.getMinutes();
+
+    // Determine the period in Nepali
+    var period;
+    if (hours >= 5 && hours < 12) {
+      period = "बिहानको"; // Morning
+    } else if (hours >= 12 && hours < 17) {
+      period = "दिउँसोको"; // Afternoon
+    } else if (hours >= 17 && hours < 20) {
+      period = "साँझको"; // Evening
+    } else {
+      period = "रातको"; // Night
+    }
+
+    // Convert hours to 12-hour format
+    var nepaliHours = hours % 12 || 12; // Convert 24-hour format to 12-hour format
+
+    var timeHTML =
+      "<span> " +
+      period +
+      " " +
+      padlength(nepaliHours) +
+      " : " +
+      padlength(minutes) +
+      "</span><br>" +
+      "<span class='eng'>" +
+      datestring +
+      "</span>";
+
+    document.getElementById("timeContent").innerHTML = timeHTML;
+  }
+
+  // Initialize and update time every minute
+  setInterval(displaytime, 1000); // Runs every second to ensure the time is always current
+  displaytime(); // Call immediately to display the initial time
+</script>
